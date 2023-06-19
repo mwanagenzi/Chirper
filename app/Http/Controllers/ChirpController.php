@@ -13,7 +13,10 @@ class ChirpController extends Controller
     public function index()
     {
 //        return response('Chirper Index route is working');
-        return view('chirps.index');
+//        return view('chirps.index');
+        return view('chirps.index', [
+            'chirps' => Chirp::with('user')->latest()->get(),
+        ]);
     }
 
     /**
@@ -32,7 +35,7 @@ class ChirpController extends Controller
         $validated_msg = $request->validate([
             'message' => 'required|string|max:255',
         ]);
-        $request->user()->chirps->create($validated_msg);
+        $request->user()->chirps()->create($validated_msg);
 
         return redirect()->route('chirps.index');
     }
